@@ -2,6 +2,7 @@ function error(msg) {
   alert(msg);
 }
 
+
 function loadFile(path, callback /* function(contents) */) {
   $.get(path, null, callback, 'text')
     .error(function() { error() });
@@ -82,10 +83,13 @@ $(function() {
   scene = createScene($('#renderArea'));
   var lastImported = localStorage.getItem('last-imported');
   var lastLoaded = localStorage.getItem('last-loaded');
-  if (lastImported) {
+  var file = false;
+  if(document.location.search.indexOf("file=")>0){
+   file = document.location.protocol+"//"+document.location.host+"/"+document.location.search.split("=").last()
+  } 
+  if (lastImported && !file) {
     openGCodeFromText(lastImported);
   } else {
-    openGCodeFromPath(lastLoaded || 'examples/octocat.gcode');
+    openGCodeFromPath(file|| 'examples/octocat.gcode');
   }
 });
-
